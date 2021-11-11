@@ -1,5 +1,13 @@
 cmake_minimum_required(VERSION 3.6)
 
+find_package(OpenCV)
+
+set(OpenCV_LIBS -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_highgui)
+
+include_directories(${OpenCV_INCLUDE_DIRS})
+
+set(TARGET_LIBS ${OpenCV_LIBS})
+
 project(libcamera-still)
 add_executable(libcamera-still libcamera_still.cpp)
 target_link_libraries(libcamera-still libcamera_app images)
@@ -20,7 +28,11 @@ project(libcamera-jpeg)
 add_executable(libcamera-jpeg libcamera_jpeg.cpp)
 target_link_libraries(libcamera-jpeg libcamera_app images)
 
-set(EXECUTABLES libcamera-still libcamera-vid libcamera-hello libcamera-raw libcamera-jpeg)
+project(libcamera-ros-publisher)
+add_executable(libcamera-ros-publisher libcamera_ros_publisher.cpp)
+target_link_libraries(libcamera-ros-publisher libcamera_app ${TARGET_LIBS})
+
+set(EXECUTABLES libcamera-still libcamera-vid libcamera-hello libcamera-raw libcamera-jpeg libcamera-ros-publisher)
 
 if (ENABLE_TFLITE)
     project(libcamera-detect)
